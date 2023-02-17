@@ -1,20 +1,19 @@
-const { glob } = require('glob');
-const { promisify } = require("util");
-const proGlob = promisify(glob);
+const { glob } = require('glob')
+const { promisify } = require('util')
+const proGlob = promisify(glob)
 const logst = require('broly-logs')
 
 module.exports = class BotUtils {
-    constructor(client) {
-        this.client = client;
-        logst(client)
-    }
+  constructor (client) {
+    this.client = client
+    logst(client)
+  }
 
-
-    async loadFiles(dirName) {
-        const Files = await proGlob(`${process.cwd().replace(/\\/g, "/")}/${dirName}/**/*.{js,json}`);
-        Files.forEach((file) => delete require.cache[require.resolve(file)]);
-        return Files;
-    }
+  async loadFiles (dirName) {
+    const Files = await proGlob(`${process.cwd().replace(/\\/g, '/')}/${dirName}/**/*.{js,json}`)
+    Files.forEach((file) => delete require.cache[require.resolve(file)])
+    return Files
+  }
 }
 
 /*
