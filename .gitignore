@@ -1,5 +1,5 @@
 #config
 .env
-
+pnpm-lock.yaml
 #packages
 node_modules/
