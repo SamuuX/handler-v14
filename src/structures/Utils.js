@@ -1,10 +1,12 @@
 const { glob } = require('glob');
 const { promisify } = require("util");
 const proGlob = promisify(glob);
+const logst = require('broly-logs')
 
 module.exports = class BotUtils {
     constructor(client) {
         this.client = client;
+        logst(client)
     }
 
 

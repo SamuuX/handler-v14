@@ -4,7 +4,8 @@
   "description": "El mejor handler en v14, compatible con slash y message commands, desarrollado por dewstouh#1088.",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
   },
   "keywords": [
     "handler",
@@ -16,10 +17,19 @@
   "author": "dewstouh#1088",
   "license": "MIT",
   "dependencies": {
+    "broly-logs": "3.2.2",
+    "canvas": "2.11.0",
     "colors": "^1.4.0",
+    "common-tags": "1.8.2",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
     "glob": "^8.0.3",
-    "mongoose": "^6.7.1"
+    "moment": "2.29.4",
+    "mongoose": "^6.7.1",
+    "ms": "2.1.3",
+    "node-superfetch": "0.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.20"
   }
 }

@@ -33,7 +33,7 @@ module.exports = class extends Client {
         presence: {
             activities: [{name: process.env.STATUS, type: ActivityType[process.env.STATUS_TYPE] ?? ActivityType.Playing}
             ],
-            status: PresenceUpdateStatus.Online
+            status: PresenceUpdateStatus.Idle
         },
     }) {
         super({

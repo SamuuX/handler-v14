@@ -5,7 +5,7 @@ module.exports = {
     .setDescription("Mira el ping del bot"),
     
     execute(client, interaction, prefix, GUILD_DATA){
-        return interaction.reply(`\`${client.ws.ping}ms\``)
+        return interaction.reply({content: `\`${client.ws.ping}ms\``, ephemeral: true})
     }
 }
 
