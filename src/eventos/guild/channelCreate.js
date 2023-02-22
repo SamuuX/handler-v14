@@ -1,28 +1,23 @@
-module.exports = (channel) => {
-	// Verificamos si nuestro bot tiene permisos de ver el log de auditoria de un servidor
-	if (!channel.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+const { EmbedBuilder } = require('discord.js')
 
-	// Verificamos que sea en un servidor
-	if (!channel.guild) return;
+module.exports = (client, channel) => {
+  const logsChannel = client.channels.cache.get('1072034594485960715')
+  if (!logsChannel) return console.error('No se encontró el canal de logs.')
+  const embed = new EmbedBuilder()
+    .setColor('#00ff00')
+    .setTitle('**[CANAL CREADO]**')
+    .setDescription(
+      `**Canal creado**\nCanal: ${channel.name} (ID: ${channel.id})\nTipo: ${channel.type}\nPor: <@${channel.author.id}> (ID: ${channel.author.id})`
+    )
+    .addFields(
+      { name: 'ID del canal', value: channel.id, inline: true },
+      { name: 'Tipo de canal', value: channel.type, inline: true }
+    )
+    .setTimestamp()
+    .setFooter(channel.guild.name, channel.guild.iconURL())
 
-	// Solicitamos los datos del logs de la auditoria registrado en un servidor
-	channel.guild.fetchAuditLogs().then(logs => {
-		// Obtenemos el id de usuario autor del log
-		const userID = logs.entries.first().executor.id;
-		// Obtenemos el avatar de usuario autor del log
-		const userAvatar = logs.entries.first().executor.avatarURL();
-
-		const msgChannel = new Discord.MessageEmbed()
-			.setTitle('**[CANAL CREADO]**')
-			.setColor('RED')
-			.setThumbnail(userAvatar)
-			.setDescription(`**Canal creado**\nCanal: ${channel.name} (ID: ${channel.id})\nTipo: ${channel.type}\nPor: <@${userID}> (ID: ${userID})`)
-			.setTimestamp()
-			.setFooter(channel.guild.name, channel.guild.iconURL());
-
-		// Enviamos el mensaje a un canal según el ID-CANAL
-		const channel = client.channels.cache.get('1072034594485960715');
-		channel.send(msgChannel);
-
-	});
-};
+  logsChannel.send({
+    content: `Ey, <@&1072028259618934814> un moderador/staff creo un Canal: ${channel.name} (ID: ${channel.id})\nTipo: ${channel.type} `,
+    embeds: [embed]
+  })
+}

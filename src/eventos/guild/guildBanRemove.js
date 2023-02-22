@@ -1,28 +1,54 @@
-module.exports = (guild, user) => {
-	// verificamos si nuestro bot tiene permisos de ver el log de auditoria de un servidor
-	if (!guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+const { EmbedBuilder } = require('discord.js')
 
-	// Solicitamos los datos del logs de la auditoria registrado en un servidor
-	guild.fetchAuditLogs().then(logs => {
-		// Obtenemos el id de usuario autor del log
-		const userID = logs.entries.first().executor.id;
-		// Obtenemos el avatar de usuario autor del log
-		const userAvatar = logs.entries.first().executor.avatarURL();
+module.exports = async (client, ban) => {
+  const guild = ban.guild
 
-		// Verificamos si el autor de la acción no sea un bot
-		if (userID === client.user.id) return;
+  if (!guild.me.permissions.has('VIEW_AUDIT_LOG')) return
 
-		const msgChannel = new Discord.MessageEmbed()
-			.setTitle('**[USUARIO DESBLOQUEADO]**')
-			.setColor('RED')
-			.setThumbnail(userAvatar)
-			.setDescription(`**Usuario desbloqueado correctamente**\nUsuario desbloqueado/desbaneado: <@${user.id}> (ID: ${user.id})\nPor: <@${userID}> (ID: ${userID})`)
-			.setTimestamp()
-			.setFooter(guild.name, guild.iconURL());
+  const logs = await guild.fetchAuditLogs({
+    type: 'MEMBER_BAN_REMOVE',
+    limit: 1
+  })
+  const entry = logs.entries.first()
 
-		// Enviamos el mensaje a un canal segun el ID-CANAL
-		const channel = client.channels.cache.get('1072034594485960715');
-		channel.send(msgChannel);
+  if (!entry) return
 
-	});
-};
+  const { executor, target } = entry
+  const usuario = target
+
+  const embed = new EmbedBuilder()
+    .setColor('#00ff00')
+    .setTitle('**[USUARIO DESBANEADO]**')
+    .setDescription(`**Usuario:** ${usuario.tag} (ID: ${usuario.id})`)
+    .setTimestamp()
+    .setFooter(guild.name, guild.iconURL())
+
+  if (!entry) {
+    embed.addFields({
+      name: 'Moderador desconocido',
+      value: 'No se pudo encontrar una entrada en el registro de auditoría'
+    })
+  } else {
+    const { executor, target } = entry
+
+    embed.addFields(
+      {
+        name: 'Moderador',
+        value: `${executor.tag} (ID: ${executor.id})`,
+        inline: true
+      },
+      {
+        name: 'Usuario desbaneado',
+        value: `${target.tag} (ID: ${target.id})`,
+        inline: true
+      }
+    )
+  }
+
+  const logsChannel = guild.channels.cache.find((c) => c.name === 'logs')
+  if (!logsChannel) return console.error('No se encontró el canal de logs.')
+  logsChannel.send({
+    content: `¡@here <@&1072028259618934814> ${executor.tag} ha desbaneado a **${usuario.tag}**!`,
+    embeds: [embed]
+  })
+}

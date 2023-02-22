@@ -1,26 +1,23 @@
-module.exports = async (role) => {
-	// Verificamos si nuestro bot tiene permisos de ver el log de auditoria de un servidor
-	if (!role.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+const { EmbedBuilder } = require('discord.js')
+module.exports = async (client, role) => {
+  const logsChannel = client.channels.cache.get('1072034594485960715')
+  if (!logsChannel) return console.error('No se encontró el canal de logs.')
 
-	// Solicitamos los datos del logs de la auditoria registrado en un servidor
-	role.guild.fetchAuditLogs().then(logs => {
-		// Obtenemos el id de usuario autor del log
-		const userID = logs.entries.first().executor.id;
-		// Obtenemos el avatar de usuario autor del log
-		const userAvatar = logs.entries.first().executor.avatarURL();
+  const embed = new EmbedBuilder()
+    .setColor('#00ff00')
+    .setTitle('**[ROL CREADO]**')
+    .setDescription(`Se ha creado el rol **${role.name}** (ID: ${role.id})`)
+    .addFields(
+      {
+        name: 'Mencionable',
+        value: role.mentionable ? 'Sí' : 'No',
+        inline: true
+      },
+      { name: 'Posición', value: role.position, inline: true },
+      { name: 'Color', value: role.hexColor, inline: true }
+    )
+    .setTimestamp()
+    .setFooter(role.guild.name, role.guild.iconURL())
 
-		// Verificamos que se haya actualizado el nombre de un rol
-		const msgChannel = new Discord.MessageEmbed()
-			.setTitle('**[ROL CREADO]**')
-			.setColor('RED')
-			.setThumbnail(userAvatar)
-			.setDescription(`**Rol creado**\nRol: ${role.name} (ID: ${role.id})\nPor: <@${userID}> (ID: ${userID})`)
-			.setTimestamp()
-			.setFooter(role.guild.name, role.guild.iconURL());
-
-		// Enviamos el mensaje a un canal segun el ID-CANAL
-		const channel = client.channels.cache.get('1072034594485960715');
-		channel.send(msgChannel);
-
-	});
-};
+  logsChannel.send({ embeds: [embed] })
+}
