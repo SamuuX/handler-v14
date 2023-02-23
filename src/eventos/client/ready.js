@@ -88,5 +88,5 @@ module.exports = async (client) => {
       embeds: [MotivationalTxt]
     })
   }
-  cron.schedule('* 30/5 23/1 * * *', motivationTxt)
+  cron.schedule('0 30 23 * * *', motivationTxt)
 }
