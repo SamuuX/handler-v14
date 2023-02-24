@@ -9,6 +9,50 @@ module.exports = (client, member) => {
 
   const { user } = member
 
+  const Admins = member.guild.roles.cache.find(
+    (role) => role.name === '『🎩』| Administrador'
+  )
+
+  const staff = member.guild.roles.cache.find(
+    (role) => role.name === '『👨‍💻』| Staff'
+  )
+
+  const memberRole = member.guild.roles.cache.find(
+    (role) => role.name === '『👤』| Miembro'
+  )
+
+  const totalMembers = member.guild.members.cache.filter(
+    (member) => !member.user.bot
+  ).size
+
+  const totalBots = member.guild.members.cache.filter(
+    (member) => member.user.bot
+  ).size
+
+  const totalAdmins = member.guild.members.cache.filter((member) =>
+    member.roles.cache.has(Admins.id)
+  ).size
+
+  const totalStaff = member.guild.members.cache.filter((member) =>
+    member.roles.cache.has(staff.id)
+  ).size
+
+  client.channels.cache
+    .get('1066925480474857621')
+    .setName(`👥 Total users - ${totalMembers}`)
+  client.channels.cache
+    .get('1066925480785231942')
+    .setName(`👤 Miembros - ${memberRole.members.size}`)
+  client.channels.cache
+    .get('1066925480785231943')
+    .setName(`🤖 Bots - ${totalBots}`)
+  client.channels.cache
+    .get('1076317793584152627')
+    .setName(`『🎩』| Admins - ${totalAdmins}`)
+  client.channels.cache
+    .get('1078485813530198148')
+    .setName(`『🛡️』| Staff - ${totalStaff}`)
+
   channel.send({
     content: `**${member.user.tag}** ha abandonado el servidor. ¡Esperamos verte de nuevo pronto! Actualmente hay ${member.guild.memberCount} miembros en el servidor.`,
     embeds: [
