@@ -1,6 +1,6 @@
 const axios = require('axios')
 const cron = require('node-cron')
-const { EmbedBuilder, PresenceUpdateStatus } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 module.exports = async (client) => {
   console.log(`Conectado como ${client.user.tag}`.green)
   if (client?.application?.commands) {
@@ -190,7 +190,7 @@ module.exports = async (client) => {
     })
   }
 
-  cron.schedule('* * * * *', actualizarConteoDeMiembros)
+  cron.schedule('*/2 * * * *', actualizarConteoDeMiembros)
   cron.schedule('0 14 * * *', motivationTxt)
   cron.schedule('30 15 * * 1-5', TwitchFunction)
 }
