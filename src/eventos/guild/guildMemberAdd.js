@@ -9,7 +9,7 @@ module.exports = async (client, member) => {
   const { user } = member
   // Obtener el rol que quieres darle al usuario
   const role = member.guild.roles.cache.find(
-    (role) => role.name === '『👤』| Miembro'
+    (role) => role.name === 'No Verificado'
   )
 
   //

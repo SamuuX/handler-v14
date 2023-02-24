@@ -1,0 +1,28 @@
+{
+  "content": "Hola, <@&1078627144751648788> Esta es la lista de Reglas",
+  "embeds": [
+   
+   
+    
+    
+    
+    {
+      "title": "Reacciona a este mensaje para verificarte",
+      "color": 16776958,
+      "author": {
+        "name": "Logs - Verificaion",
+        "icon_url": "https://cdn.discordapp.com/avatars/859362444015173632/68f7921d71e041a1dbc3f4b144abf7ea.png?&ignore=true)."
+      },
+      "footer": {
+        "text": "Verificacion",
+        "icon_url": "https://cdn.discordapp.com/avatars/859362444015173632/68f7921d71e041a1dbc3f4b144abf7ea.png?&ignore=true)."
+      },
+      "thumbnail": {
+        "url": "https://cdn.discordapp.com/avatars/859362444015173632/68f7921d71e041a1dbc3f4b144abf7ea.png?&ignore=true)."
+      }
+    }
+  ],
+  "username": "Reglas Lexxuz",
+  "avatar_url": "https://cdn.discordapp.com/avatars/859362444015173632/68f7921d71e041a1dbc3f4b144abf7ea.png?&ignore=true).",
+  "attachments": []
+}
