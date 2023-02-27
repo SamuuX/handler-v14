@@ -5,10 +5,21 @@
  <a href="https://wakatime.com/badge/user/c626ef58-ee81-4ae9-b381-aef804765fb6/project/1a9bb939-bff2-45a0-8ece-e4bcddfae5ba"><img src="https://wakatime.com/badge/user/c626ef58-ee81-4ae9-b381-aef804765fb6/project/1a9bb939-bff2-45a0-8ece-e4bcddfae5ba.svg" alt="wakatime"></a>
 </div>
 
-![Metrics](/github-metrics.svg)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/SamuuX/handler-v14/master.svg)](https://results.pre-commit.ci/latest/github/SamuuX/handler-v14/master)
 
-# Handler Bot de Discord | V14 
+---
+
+### :zap: Recent Activity
+
+<!--START_SECTION:activity-->
+1. ❗️ Opened issue
+2. 💪 Opened PR
+3. 🗣 Commented on
+<!--END_SECTION:activity-->
+
+---
+
+# Handler Bot de Discord | V14
 
 El handler que necesitas para tu bot de Discord!
 > 👤 *Creado por **`Samuu_X`***
-

@@ -1,21 +1,138 @@
-name: 'CI'
 on:
   push:
+    # Sequence of patterns matched against refs/tags
     tags:
-      - '*'
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
 
 jobs:
-  release:
-    if: startsWith(github.ref, 'refs/tags/')
+  build:
+    name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.TokenGitHub }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - run: |
+        git fetch --prune --unshallow --tags
+
+      - name: Create changelogs
+        id: changelogs
+        uses: heineiuo/create-changelogs@master # 👀
 
       - name: Create Release
-        uses: mikepenz/action-gh-release@v0.2.0-a03 #softprops/action-gh-release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          github_token: ${{ secrets.METRICS_TOKEN }}
         with:
-          body: ${{steps.github_release.outputs.changelog}}
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{ steps.changelogs.outputs.changelogs }}
+          draft: false
+          prerelease: ${{ steps.changelogs.outputs.release_type == 'prerelease' }}
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - run: |
+        git fetch --prune --unshallow --tags
+
+      - name: Create changelogs
+        id: changelogs
+        uses: heineiuo/create-changelogs@master # 👀
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          github_token: ${{ secrets.METRICS_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{ steps.changelogs.outputs.changelogs }}
+          draft: false
+          prerelease: ${{ steps.changelogs.outputs.release_type == 'prerelease' }}
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - run: |
+        git fetch --prune --unshallow --tags
+
+      - name: Create changelogs
+        id: changelogs
+        uses: heineiuo/create-changelogs@master # 👀
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          github_token: ${{ secrets.METRICS_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{ steps.changelogs.outputs.changelogs }}
+          draft: false
+          prerelease: ${{ steps.changelogs.outputs.release_type == 'prerelease' }}on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - run: |
+        git fetch --prune --unshallow --tags
+
+      - name: Create changelogs
+        id: changelogs
+        uses: heineiuo/create-changelogs@master # 👀
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          github_token: ${{ secrets.METRICS_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{ steps.changelogs.outputs.changelogs }}
+          draft: false
+          prerelease: ${{ steps.changelogs.outputs.release_type == 'prerelease' }}
+
