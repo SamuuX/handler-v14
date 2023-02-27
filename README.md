@@ -5,6 +5,8 @@
  <a href="https://wakatime.com/badge/user/c626ef58-ee81-4ae9-b381-aef804765fb6/project/1a9bb939-bff2-45a0-8ece-e4bcddfae5ba"><img src="https://wakatime.com/badge/user/c626ef58-ee81-4ae9-b381-aef804765fb6/project/1a9bb939-bff2-45a0-8ece-e4bcddfae5ba.svg" alt="wakatime"></a>
 </div>
 
+![Metrics](/github-metrics.svg)
+
 # Handler Bot de Discord | V14 
 
 El handler que necesitas para tu bot de Discord!
