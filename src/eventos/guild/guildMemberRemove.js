@@ -1,11 +1,12 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder, AuditLogEvent } = require('discord.js')
 
-module.exports = (client, member) => {
+module.exports = async (client, member) => {
   const channel = member.guild.channels.cache.find(
     (ch) => ch.name === 'despedidas'
   )
 
   if (!channel) return
+  if (member.user.bot) return
 
   const { user } = member
 
@@ -52,7 +53,6 @@ module.exports = (client, member) => {
   client.channels.cache
     .get('1078485813530198148')
     .setName(`『🛡️』| Staff - ${totalStaff}`)
-
   channel.send({
     content: `**${member.user.tag}** ha abandonado el servidor. ¡Esperamos verte de nuevo pronto! Actualmente hay ${member.guild.memberCount} miembros en el servidor.`,
     embeds: [
@@ -60,7 +60,7 @@ module.exports = (client, member) => {
         .setColor('#FF0000')
         .setTitle('¡Hasta la vista!')
         .setDescription(
-          `**${member.user.username}** ha abandonado el servidor.`
+              `**${member.user.username}** ha abandonado el servidor.`
         )
         .addFields(
           {
@@ -71,6 +71,16 @@ module.exports = (client, member) => {
           {
             name: 'ID del Usuario',
             value: user.id,
+            inline: true
+          },
+          // {
+          //   name: 'Roles del Usuario',
+          //   value: userRoles,
+          //   inline: true
+          // },
+          {
+            name: 'Se unio al Servidor en',
+            value: member.partial ? '*No puede determinar*' : `<t:${Math.floor(member.joinedTimestamp / 1000)}> (<t:${Math.floor(member.joinedTimestamp / 1000)}:R>)`,
             inline: true
           },
           {
@@ -85,4 +95,64 @@ module.exports = (client, member) => {
         .setTimestamp()
     ]
   })
+
+  const kickChannel = client.channels.cache.get('1078935528830943262')
+
+  const fetchedLogs = await member.guild.fetchAuditLogs({
+    limit: 1,
+    type: AuditLogEvent.MemberKick
+  })
+  // Since there's only 1 audit log entry in this collection, grab the first one
+  const kickLog = fetchedLogs.entries.first()
+  const { executor: Moderador, target: Usuario, reason: razonKick } = kickLog
+
+  if (kickLog) {
+    kickChannel.send({
+      content: `**${member.user.tag}** ha sido kickeado del servidor. por <@!${Moderador.id}> y Actualmente hay ${member.guild.memberCount} miembros en el servidor.`,
+      embeds: [
+        new EmbedBuilder()
+          .setColor('#FF0000')
+          .setThumbnail(
+            member.user.avatarURL({ format: 'png', size: 1024, dynamic: true })
+          )
+          .setAuthor({
+            name: member.user.username, iconURL: member.user.avatarURL({ format: 'png', size: 1024, dynamic: true })
+          })
+          .setFooter({ text: `Logs - Kicks ${member.guild.name}`, iconURL: member.guild.iconURL({ format: 'png', size: 2048, dynamic: true }) })
+          .setDescription(`***${member.user.tag}** ha sido kickeado del servidor el <t:${Math.floor(Date.now() / 1000)}> (<t:${Math.floor(Date.now() / 1000)}:R>)*`)
+          .addFields(
+            {
+              name: 'Usuario Kickeado',
+              value: `<@!${Usuario.id}> - ${Usuario.tag} - ${Usuario.id}`,
+              inline: true
+            },
+            // {
+            //   name: 'Roles del Usuario Kickeado',
+            //   value: userRoles,
+            //   inline: true
+            // },
+            {
+              name: 'Se unio al Servidor en',
+              value: member.partial ? '*No puede determinar*' : `<t:${Math.floor(member.joinedTimestamp / 1000)}> (<t:${Math.floor(member.joinedTimestamp / 1000)}:R>)`,
+              inline: true
+            },
+            {
+              name: 'Moderador responsable',
+              value: Moderador ? Moderador.username : 'Desconocido',
+              inline: true
+            },
+            // {
+            //   name: 'Roles del Moderador',
+            //   value: modRoles,
+            //   inline: true
+            // },
+            {
+              name: 'Razon del kick',
+              value: `${razonKick || 'Sin rason'}`,
+              inline: true
+            }
+          )
+      ]
+    })
+  }
 }

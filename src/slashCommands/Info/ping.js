@@ -8,10 +8,3 @@ module.exports = {
     return interaction.reply({ content: `\`${client.ws.ping}ms\``, ephemeral: true })
   }
 }
-
-/*
-╔═════════════════════════════════════════════════════╗
-║    || - || Desarrollado por dewstouh#1088 || - ||   ║
-║    ----------| discord.gg/MBPsvcphGf |----------    ║
-╚═════════════════════════════════════════════════════╝
-*/

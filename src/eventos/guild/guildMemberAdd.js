@@ -1,17 +1,29 @@
-const { EmbedBuilder } = require('discord.js')
+/* eslint-disable no-useless-catch */
+const { EmbedBuilder, PermissionsBitField, AuditLogEvent, AttachmentBuilder } = require('discord.js')
+const canvacord = require('canvacord')
+// const despedidaDB = require('../../schema/despedidas/despedidas')
+const AntiRaid = require('../../database/schemas/AntiRaids.js')
 
 module.exports = async (client, member) => {
   const channel = member.guild.channels.cache.find(
     (ch) => ch.name === 'bienvenidas'
-  ) // reemplaza 'nombre-del-canal' con el nombre del canal donde quieres enviar el mensaje
+  )
+
   if (!channel) return
+  if (!member.user.bot) return
+  const auditLogs = await member.guild.fetchAuditLogs({
+    linmit: 1,
+    type: AuditLogEvent.BOT_ADD
+  })
+  const auditlog = auditLogs.entries.first()
+  if (!auditlog) return
+  member.kick({ reason: 'ANTI-BOTS' })
 
   const { user } = member
   // Obtener el rol que quieres darle al usuario
   const role = member.guild.roles.cache.find(
     (role) => role.name === 'No Verificado'
   )
-
   //
   const gifs = [
     'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNThjZTQ3MWU4YTdiMTI4YTcwMDM1ODAwZGEyYWFhYmZmMmI1NDMyMCZjdD1n/xAdtMyM5YEcRq/giphy.gif',
@@ -24,18 +36,51 @@ module.exports = async (client, member) => {
   const randomGif = gifs[randomIndex]
 
   // Si el rol existe, agregarlo al usuario
-  if (role) {
-    member.roles
-      .add(role)
-      .then(() =>
-        console.log(
-          `Se ha agregado el rol ${role.name} a ${member.displayName}`
-        )
-      )
-      .catch(console.error)
-  } else {
-    console.log(`No se ha encontrado el rol ${role.name}`)
+  const roleOWNERS = member.guild.roles.cache.find(role => role.name === '『👑』| Fundador')
+  const roleDEV = member.guild.roles.cache.find(role => role.name === '『💻』| Developer')
+  const OWNER_IDS = process.env.OWNER_IDS.split(',')
+  console.log(OWNER_IDS)
+  const DEV_IDS = process.env.DEVS_IDS.split(',')
+  console.log(DEV_IDS)
+  if (!roleDEV) {
+    await member.guild.roles.create({
+      data: {
+        name: '『💻』| Developer',
+        color: '#ff8600',
+        permissions: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.KickMembers, PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.CreateInstantInvite, PermissionsBitField.Flags.ManageChannels, PermissionsBitField.Flags.ViewAuditLog, PermissionsBitField.Flags.ManageMessages, PermissionsBitField.Flags.ReadMessageHistory, PermissionsBitField.Flags.Connect, PermissionsBitField.Flags.Speak, PermissionsBitField.Flags.MuteMembers, PermissionsBitField.Flags.ChangeNickname, PermissionsBitField.Flags.ManageNicknames, PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageWebhooks, PermissionsBitField.Flags.UseApplicationCommands, PermissionsBitField.Flags.CreatePublicThreads, PermissionsBitField.Flags.CreatePrivateThreads, PermissionsBitField.Flags.ModerateMembers],
+        position: 15
+      }
+    })
   }
+  if (OWNER_IDS.includes(member.id)) {
+    member.roles.add(roleOWNERS)
+    console.log(`Se ha agregado el rol ${roleOWNERS.name} a ${member.displayName}`)
+  } else if (DEV_IDS.includes(member.id)) {
+    member.roles.add(roleDEV)
+    console.log(`Se ha agregado el rol ${roleDEV.name} a ${member.displayName}`)
+  } else {
+    member.roles.add(role)
+  }
+
+  // eslint-disable-next-line n/handle-callback-err
+  AntiRaid.findOne({ GuildID: member.guild.id }, async (err, data) => {
+    const Razon = 'El Sistema Anti-Raid esta en modo Activado.'
+    const ANTI = new EmbedBuilder()
+      .setTitle('ANTI-RAID')
+      .setColor('Red')
+      .setTimestamp()
+      .setThumbnail(client.user.displayAvatarURL())
+      .setDescription(`Has sido expulsado de **${member.guild.name}**\nRazon: **${Razon}**`)
+    if (!data) return
+    if (data) {
+      try {
+        member.send({ embeds: [ANTI] })
+      } catch (e) {
+        throw e
+      }
+      member.kick(Razon)
+    }
+  })
 
   const Admins = member.guild.roles.cache.find(
     (role) => role.name === '『🎩』| Administrador'

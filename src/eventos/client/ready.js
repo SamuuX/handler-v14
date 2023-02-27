@@ -1,12 +1,50 @@
 const axios = require('axios')
 const cron = require('node-cron')
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder, version } = require('discord.js')
+const BotUtils = require('../../structures/Utils')
 module.exports = async (client) => {
   console.log(`Conectado como ${client.user.tag}`.green)
   if (client?.application?.commands) {
     client.application.commands.set(client.slashArray)
     console.log(`(/) ${client.slashCommands.size} Comandos Publicados!`.green)
   }
+  this.utils = new BotUtils(this)
+  const RUTA_ARCHIVOS = await this.utils.loadFiles('../../eventos/')
+  console.log(
+    'Nombre del bot: ' +
+      `${client.user.tag}` +
+      '\n' +
+      'Servidores: ' +
+      `${client.guilds.cache.size} Servers` +
+      '\n' +
+      'Viendo: ' +
+      `${client.guilds.cache.reduce((a, b) => a + b.memberCount, 0)} Miembros` +
+       '\n' +
+       'Prefix: ' +
+       `${process.env.PREFIX}` +
+       '\n' +
+       'Comandos En total: ' +
+       `${client.commands.size + client.slashCommands.size}` +
+       '\n' +
+       'Comandos Prefix: ' + `${client.commands.size}` +
+       '\n' +
+       'Comandos SlashCommadns: ' + `${client.slashCommands.size}` +
+       '\n' +
+       'Eventos: ' +
+       `v${RUTA_ARCHIVOS.size}` +
+       '\n' +
+       'Discord.js: ' +
+       `v${version}` +
+       '\n' +
+       'Node.js: ' +
+       `${process.version}` +
+       '\n' +
+       'Plataforma: ' +
+       `${process.platform} ${process.arch}` +
+       '\n' +
+       'Memoria: ' +
+       `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB / ${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)}  MB`
+  )
 
   const guild = client.guilds.cache.get('1066925479522730015')
 
@@ -41,6 +79,21 @@ module.exports = async (client) => {
   const totalStaff = guild.members.cache.filter((member) =>
     member.roles.cache.has(staff.id)
   ).size
+  client.channels.cache
+    .get('1066925480474857621')
+    .setName(`👥 Total users - ${totalMembers}`)
+  client.channels.cache
+    .get('1066925480785231942')
+    .setName(`👤 Miembros - ${memberRole.members.size}`)
+  client.channels.cache
+    .get('1066925480785231943')
+    .setName(`🤖 Bots - ${totalBots}`)
+  client.channels.cache
+    .get('1076317793584152627')
+    .setName(`『🎩』| Admins - ${totalAdmins}`)
+  client.channels.cache
+    .get('1078485813530198148')
+    .setName(`『🛡️』| Staff - ${totalStaff}`)
 
   function actualizarConteoDeMiembros () {
     // Actualiza el nombre del canal de texto correspondiente con los nuevos valores
@@ -50,21 +103,6 @@ module.exports = async (client) => {
     // client.channels.cache
     //   .get('1078539338347982848')
     //   .setName(`『🛡️』Staff on: ${staffConectados}`)
-    client.channels.cache
-      .get('1066925480474857621')
-      .setName(`👥 Total users - ${totalMembers}`)
-    client.channels.cache
-      .get('1066925480785231942')
-      .setName(`👤 Miembros - ${memberRole.members.size}`)
-    client.channels.cache
-      .get('1066925480785231943')
-      .setName(`🤖 Bots - ${totalBots}`)
-    client.channels.cache
-      .get('1076317793584152627')
-      .setName(`『🎩』| Admins - ${totalAdmins}`)
-    client.channels.cache
-      .get('1078485813530198148')
-      .setName(`『🛡️』| Staff - ${totalStaff}`)
     client.channels.cache
       .get('1078499717345972284')
       .setName(
@@ -122,7 +160,7 @@ module.exports = async (client) => {
         })
 
         await client.channels.cache.get('1071947227519537183').send({
-          content: `🔴 @everyone ${user} está en directo. __**¡Corre a verlo!**__ 🔴\n\nhttps://www.twitch.tv/${user}`,
+          content: `🔴 <@&1073804519688904724> ${user} está en directo. __**¡Corre a verlo!**__ 🔴\n\nhttps://www.twitch.tv/${user}`,
           embeds: [TwitchEmbed]
         })
 
@@ -132,7 +170,7 @@ module.exports = async (client) => {
       if (data.titulo === `${title.data}`) return
 
       await client.channels.cache.get('1071947227519537183').send({
-        content: `🔴 @everyone ${user} está en directo. __**¡Corre a verlo!**__ 🔴\n\nhttps://www.twitch.tv/${user}`,
+        content: `🔴 <@&1073804519688904724> ${user} está en directo. __**¡Corre a verlo!**__ 🔴\n\nhttps://www.twitch.tv/${user}`,
         embeds: [TwitchEmbed]
       })
 
@@ -182,7 +220,10 @@ module.exports = async (client) => {
     })
   }
 
-  cron.schedule('*/2 * * * *', actualizarConteoDeMiembros)
+  cron.schedule('*/5 * * * *', actualizarConteoDeMiembros)
+  console.log('🚀 ~ file: ready.js:185 ~ module.exports= ~ actualizarConteoDeMiembros:', actualizarConteoDeMiembros)
   cron.schedule('0 14 * * *', motivationTxt)
-  cron.schedule('30 15 * * 1-5', TwitchFunction)
+  console.log('🚀 ~ file: ready.js:187 ~ module.exports= ~ motivationTxt:', motivationTxt)
+  cron.schedule('*/5 * * * 1-5', TwitchFunction)
+  console.log('🚀 ~ file: ready.js:189 ~ module.exports= ~ TwitchFunction:', TwitchFunction)
 }

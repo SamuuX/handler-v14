@@ -1,0 +1,10 @@
+{
+  "muteRoleID": "1066946233148657684",
+  "maxWarns": "3",
+  "warnRoles": [
+    "Warn 1",
+    "Warn 2",
+    "Warn 3"
+  ],
+  "tempbanDuration": "259200"
+}

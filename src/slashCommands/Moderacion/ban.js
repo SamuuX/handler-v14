@@ -1,65 +1,53 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
-const Discord = require('discord.js')
-const { stripIndent } = require('common-tags')
+const { SlashCommandBuilder } = require('discord.js')
+
 module.exports = {
   CMD: new SlashCommandBuilder()
-    .setDescription('Sirve para banear a un user')
-    .setDefaultMemberPermissions(Discord.PermissionFlagsBits.BanMembers)
-    // .addUserOption((option) =>
-    //   option
-    //     .setName('usuario')
-    //     .setDescription('Menciona el usuario')
-    //     .setRequired(true)
-    // )
-    // .addStringOption((option) =>
-    //   option
-    //     .setName('razon')
-    //     .setDescription('Menciona la razón')
-    //     .setRequired(false)
-    // )
     .setName('ban')
-    .addSubcommandGroup((group) =>
-      group
-        .setName('group_a')
-        .setDescription('group a')
-        .addSubcommand((subcommand) =>
-          subcommand
-            .setName('temp')
-            .setDescription('Temporary bans a user')
-            .addUserOption((option) =>
-              option.setName('user').setDescription('user to be banned')
-            )
-        )
-        .addSubcommand((subcommand) =>
-          subcommand
-            .setName('perma')
-            .setDescription('Permanently bans a user')
-            .addUserOption((option) =>
-              option.setName('user').setDescription('user to be banned')
-            )
-        )
-    )
-    .addSubcommandGroup((group) =>
-      group
-        .setName('b')
-        .setDescription('group b')
-        .addSubcommand((subcommand) =>
-          subcommand.setName('soft').setDescription('soft ban')
-        )
-    ),
+    .setDescription('Banea a un miembro del servidor.')
+    .addUserOption(option =>
+      option.setName('miembro')
+        .setDescription('El miembro que deseas banear.')
+        .setRequired(true))
+    .addStringOption(option =>
+      option.setName('razón')
+        .setDescription('La razón del ban.')
+        .setRequired(false)),
 
-  execute (client, interaction, prefix, GUILD_DATA) {
-    const { guild, options } = interaction
-    const member = options.getMember('usuario')
-    const razon = options.getString('razon') || 'Razón no específicada'
-    const user = member.user.username
-    member.ban({ reason: razon })
-    const embed = new EmbedBuilder()
-      .setTitle(':alarma: USUARIO BANEADO! :alarma:')
-      .setDescription(
-        `**🎈 Usuario: ${user}**\n\n**🚀En el servidor: ${guild.name}**\n\n**🧵Con la razon: ${razon}**`
-      )
-      .setColor('Green')
-    interaction.reply({ embeds: [embed], ephemeral: true })
+  async execute (client, interaction, prefix, GUILD_DATA) {
+    const member = interaction.options.getMember('miembro')
+    const reason = interaction.options.getString('razón') || 'Sin razón especificada.'
+
+    // Comprobar si el miembro tiene permisos para banear.
+    if (!interaction.member.permissions.has('BAN_MEMBERS')) {
+      return interaction.reply({
+        content: 'No tienes permiso para banear miembros.',
+        ephemeral: true
+      })
+    }
+
+    // Comprobar si el miembro que se va a banear tiene permisos iguales o superiores a los del miembro que ejecuta el comando.
+    if (member.permissions.has('ADMINISTRATOR') || member.permissions.has('BAN_MEMBERS')) {
+      return interaction.reply({
+        content: 'No puedes banear a este miembro.',
+        ephemeral: true
+      })
+    }
+
+    try {
+      // Banear al miembro.
+      await member.ban({ reason })
+
+      // Enviar un mensaje de confirmación.
+      return interaction.reply({
+        content: `${member.user.tag} ha sido baneado por ${interaction.user.tag} por la siguiente razón: ${reason}`,
+        ephemeral: false
+      })
+    } catch (error) {
+      console.error(error)
+      return interaction.reply({
+        content: 'Ha ocurrido un error al intentar banear a este miembro.',
+        ephemeral: true
+      })
+    }
   }
 }
