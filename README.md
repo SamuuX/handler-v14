@@ -11,3 +11,5 @@
 
 El handler que necesitas para tu bot de Discord!
 > 👤 *Creado por **`Samuu_X`***
+
+<!--START_SECTION:activity-->
