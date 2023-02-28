@@ -25,7 +25,7 @@ jobs:
         id: create_release
         uses: actions/create-release@latest
         env:
-          github_token: ${{ secrets.METRICS_TOKEN }}
+          github_token: ${{ secrets.TOKENGITHUB }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -60,7 +60,7 @@ jobs:
         id: create_release
         uses: actions/create-release@latest
         env:
-          github_token: ${{ secrets.METRICS_TOKEN }}
+          github_token: ${{ secrets.TOKENGITHUB }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -95,7 +95,7 @@ jobs:
         id: create_release
         uses: actions/create-release@latest
         env:
-          github_token: ${{ secrets.METRICS_TOKEN }}
+          github_token: ${{ secrets.TOKENGITHUB }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -128,7 +128,7 @@ jobs:
         id: create_release
         uses: actions/create-release@latest
         env:
-          github_token: ${{ secrets.METRICS_TOKEN }}
+          github_token: ${{ secrets.TOKENGITHUB }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
