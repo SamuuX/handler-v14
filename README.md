@@ -11,7 +11,7 @@
 <!-- readme-tree end -->
 ---
 
-![Subscriber](https://custom-icon-badges.herokuapp.com/youtube/channel/subscribers/UCj9stNGVvQJspYMp8-lG_ng?color=%23E05D44&label=SUBSCRIBE&logo=video&logoColor=white&style=for-the-badge&labelColor=CE4630)
+<!-- ![Subscriber](https://custom-icon-badges.herokuapp.com/youtube/channel/subscribers/UCj9stNGVvQJspYMp8-lG_ng?color=%23E05D44&label=SUBSCRIBE&logo=video&logoColor=white&style=for-the-badge&labelColor=CE4630) -->
 ![](https://custom-icon-badges.herokuapp.com/youtube/channel/views/UCtHTCVs_1V1XWuuF4N8ZTDg?color=%23E1AD0E&logo=video&logoColor=white&style=for-the-badge&labelColor=C79600)
 ![Stars](https://custom-icon-badges.herokuapp.com/badge/dynamic/json?logo=star&color=55960c&labelColor=488207&label=Stars&style=for-the-badge&query=%24.stars&url=https://api.github-star-counter.workers.dev/user/SamuuX)
 ![](https://custom-icon-badges.herokuapp.com/github/followers/SamuuX?color=236ad3&labelColor=1155ba&style=for-the-badge&logo=person-add&label=Follow&logoColor=white)
